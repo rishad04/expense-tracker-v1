@@ -10,7 +10,7 @@ Simple expense tracking system with monthly reports and categories.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/expense-tracker.git
+   git clone https://github.com/rishad04/expense-tracker-v1
    cd expense-tracker
    ```
 
