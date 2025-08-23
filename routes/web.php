@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CurrentMonthExpenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +20,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', [CurrentMonthExpenseController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/current-month-expenses', function () {
+    return view('current-month-expenses');
+})->middleware(['auth', 'verified'])->name('current-month-expenses');
+
+// Current Month Expenses 
+Route::get('/current-month-expenses', [CurrentMonthExpenseController::class, 'index'])->middleware(['auth', 'verified'])->name('current-month-expenses');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,4 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::middleware(['auth'])->group(function () {
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+    Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+});
+
+require __DIR__ . '/auth.php';
