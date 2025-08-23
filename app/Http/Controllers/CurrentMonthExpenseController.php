@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,26 @@ class CurrentMonthExpenseController extends Controller
     {
         $categories = Category::latest()->get();
 
-        return view('dashboard', compact('categories'));
-    }
-    // public function index()
-    // {
-    //     $categories = Category::latest()->get();
+        $currentMonth = now()->format('Y-m');
+        $user = auth()->user();
 
-    //     return view('current-month-expenses', compact('categories'));
-    // }
+        $monthlyTotals = Expense::selectRaw('categories.slug as category_slug, SUM(amount) as total')
+            ->join('categories', 'expenses.category_id', '=', 'categories.id')
+            ->where('expenses.user_id', $user->id)
+            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->groupBy('categories.slug')
+            ->pluck('total', 'category_slug');
+
+        // dd($monthlyTotals);
+
+        $grandTotal = $monthlyTotals->sum();
+        $monthlyTotals->put('total', $grandTotal);
+
+        // dd($monthlyTotals);
+
+        return view('dashboard', compact('categories', 'monthlyTotals'));
+    }
+
 
     /**
      * Show the form for creating a new resource.

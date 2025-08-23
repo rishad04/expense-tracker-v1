@@ -19,7 +19,7 @@
                 <!-- This Month's Expense Chart -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">This Month's Expense</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">This Month's Expense Chart</h3>
                         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8">
                             <!-- Chart Section -->
                             <div class="flex-shrink-0">
@@ -28,7 +28,7 @@
                                     <div class="absolute inset-0 flex items-center justify-center">
                                         <div class="text-center">
                                             <div class="text-sm font-medium text-gray-600">Total</div>
-                                            <div class="text-xl font-bold text-gray-800">$5,100</div>
+                                            <div class="text-xl font-bold text-gray-800">${{ number_format($monthlyTotals['total']) }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -37,38 +37,32 @@
                             <!-- Category Summary Section -->
                             <div class="flex-1 min-w-0">
                                 <div class="space-y-4">
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 rounded-full bg-green-500 mr-3"></div>
-                                            <span class="text-base font-medium text-gray-700">Transport</span>
-                                        </div>
-                                        <span class="text-base font-semibold text-gray-900">$1,200</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 rounded-full bg-orange-500 mr-3"></div>
-                                            <span class="text-base font-medium text-gray-700">Food</span>
-                                        </div>
-                                        <span class="text-base font-semibold text-gray-900">$2,500</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 rounded-full bg-blue-500 mr-3"></div>
-                                            <span class="text-base font-medium text-gray-700">Shopping</span>
-                                        </div>
-                                        <span class="text-base font-semibold text-gray-900">$800</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 rounded-full bg-purple-500 mr-3"></div>
-                                            <span class="text-base font-medium text-gray-700">Others</span>
-                                        </div>
-                                        <span class="text-base font-semibold text-gray-900">$600</span>
-                                    </div>
+
+                                    {{-- @dd($monthlyTotals) --}}
+                                    @forelse ($monthlyTotals as $categoryTitle => $total)
+                                        @if ($categoryTitle !== 'total')
+                                            <div class="flex justify-between items-center mb-2">
+                                                <div class="flex items-center">
+                                                    {{-- Dynamically set the color based on the category title if you have a mapping --}}
+                                                    <div class="w-3 h-3 rounded-full {{ categoryColorClass($categoryTitle) }}  mr-3"></div>
+                                                    
+                                                    {{-- Display the category title --}}
+                                                    <span class="text-base font-medium text-gray-700">{{ ucwords($categoryTitle) }}</span>
+                                                </div>
+
+                                                {{-- Display the total amount for the category --}}
+                                                <span class="text-base font-semibold text-gray-900">$ {{ number_format($total, 2) }}</span>
+                                            </div>
+                                        @endif
+                                    @empty
+                                        <p class="text-center text-gray-500">No expenses this month.</p>
+                                    @endforelse
+
+
                                     <hr class="border-gray-200 my-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-lg font-bold text-gray-900">Total</span>
-                                        <span class="text-lg font-bold text-gray-900">$5,100</span>
+                                        <span class="text-lg font-bold text-gray-900">${{ number_format($monthlyTotals['total']) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -80,10 +74,10 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-semibold text-gray-800">Today's Expense</h3>
-                            <button class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                View All
-                            </button>
+                            <h3 class="text-lg font-semibold text-gray-800">Today's Recently Added Expenses</h3>
+                            <a href="{{ route('expenses.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            View All
+                        </a>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
@@ -178,7 +172,7 @@
                 <!-- Title -->
                 <div class="mb-3">
                     <label class="block text-gray-700">Title</label>
-                    <input type="text" name="title" value="{{ old('title') }}" placeholder="Ex: Trasport Cost"
+                    <input type="text" name="title" value="{{ old('title') }}" placeholder="Title"
                         class="w-full border rounded-lg px-3 py-2 @error('title') border-red-500 @enderror" required>
                     @error('title')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -333,116 +327,12 @@
 
     {{-- Chart script --}}
 
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Monthly Expense Donut Chart
-            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-            new Chart(monthlyCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Housing', 'Transportation', 'Utilities', 'Entertainment', 'Food'],
-                    datasets: [{
-                        data: [65.4, 15.2, 8.7, 6.5, 4.2],
-                        backgroundColor: [
-                            '#3B82F6', // blue-500
-                            '#10B981', // green-500
-                            '#EF4444', // red-500
-                            '#F59E0B', // yellow-500
-                            '#F97316'  // orange-500
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#ffffff',
-                        cutout: '60%'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.parsed + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Daily Expense Bar Chart
-            const dailyCtx = document.getElementById('dailyChart').getContext('2d');
-            new Chart(dailyCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Coffee - $4.50', 'Lunch - $18.00', 'Lunch - $65.00', 'Groceries'],
-                    datasets: [{
-                        label: 'Amount',
-                        data: [4.50, 18.00, 65.00, 25.00],
-                        backgroundColor: [
-                            '#EF4444', // red-500
-                            '#10B981', // green-500
-                            '#10B981', // green-500
-                            '#3B82F6'  // blue-500
-                        ],
-                        borderColor: [
-                            '#DC2626', // red-600
-                            '#059669', // green-600
-                            '#059669', // green-600
-                            '#2563EB'  // blue-600
-                        ],
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '$' + context.parsed.y.toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: '#F3F4F6'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value;
-                                },
-                                color: '#6B7280'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#6B7280',
-                                maxRotation: 45
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script> --}}
-
    <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        const monthlyTotals = @json($monthlyTotals);
+        // console.log(monthlyTotals);
+
         // Monthly Expense Donut Chart
         const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
         new Chart(monthlyCtx, {
@@ -450,7 +340,7 @@
             data: {
                 labels: ['Food', 'Transport', 'Shopping', 'Others'],
                 datasets: [{
-                    data: [2500, 1200, 800, 600],
+                    data: [monthlyTotals.food, monthlyTotals.transport, monthlyTotals.shopping, monthlyTotals.other],
                     backgroundColor: [
                         '#F97316', // orange-500 - Food
                         '#10B981', // green-500 - Transport
@@ -477,72 +367,6 @@
                                 const percentage = ((value * 100) / total).toFixed(1);
                                 return `${context.label}: $${value} (${percentage}%)`;
                             }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Daily Expense Bar Chart
-        const dailyCtx = document.getElementById('dailyChart').getContext('2d');
-        new Chart(dailyCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Coffee - $4.50', 'Lunch - $18.00', 'Dinner - $65.00', 'Groceries'],
-                datasets: [{
-                    label: 'Amount',
-                    data: [4.50, 18.00, 65.00, 25.00],
-                    backgroundColor: [
-                        '#EF4444', // red-500
-                        '#10B981', // green-500
-                        '#10B981', // green-500
-                        '#3B82F6'  // blue-500
-                    ],
-                    borderColor: [
-                        '#DC2626', // red-600
-                        '#059669', // green-600
-                        '#059669', // green-600
-                        '#2563EB'  // blue-600
-                    ],
-                    borderWidth: 1,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '$' + context.parsed.y.toFixed(2);
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#F3F4F6'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value;
-                            },
-                            color: '#6B7280'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#6B7280',
-                            maxRotation: 45
                         }
                     }
                 }

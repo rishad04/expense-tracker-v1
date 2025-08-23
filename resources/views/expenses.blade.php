@@ -110,7 +110,7 @@
                 <!-- Title -->
                 <div class="mb-3">
                     <label class="block text-gray-700">Title</label>
-                    <input type="text" name="title" value="{{ old('title') }}" placeholder="Ex: Trasport Cost"
+                    <input type="text" name="title" value="{{ old('title') }}"  placeholder="Title"
                         class="w-full border rounded-lg px-3 py-2 @error('title') border-red-500 @enderror" required>
                     @error('title')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
