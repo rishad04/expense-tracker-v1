@@ -83,6 +83,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sr.</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
@@ -90,38 +91,33 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr class="hover:bg-gray-50">
+
+                                     @forelse ($data as $row)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $row->title }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$ {{ $row->amount }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $row->category?->title }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $row->date }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                                                No Data Found !
+                                            </td>
+                                        </tr>
+                                    @endforelse
+
+                                    {{-- <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Groceries</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$75.23</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Food</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03/10/2023</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Groceries</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$42.50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Food</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03/10/2023</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Dinner with friends</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$42.50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Social</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03/09/2023</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Online Course Subscription</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$120.00</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Education</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03/08/2023</td>
-                                    </tr>
+                                    </tr> --}}
                                    
                                 </tbody>
                             </table>

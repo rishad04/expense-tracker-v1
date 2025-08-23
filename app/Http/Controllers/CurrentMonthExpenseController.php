@@ -32,7 +32,10 @@ class CurrentMonthExpenseController extends Controller
 
         // dd($monthlyTotals);
 
-        return view('dashboard', compact('categories', 'monthlyTotals'));
+        $data = Expense::latest()->limit(4)->get();
+
+        // $data = Expense::latest()->limit(4)->get();
+        return view('dashboard', compact('categories', 'monthlyTotals', 'data'));
     }
 
 
