@@ -16,10 +16,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Dashboard Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- This Month's Expense Chart -->
+                <!-- Current Month's Expense Chart -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">This ({{\Carbon\Carbon::now()->format('F')}}) Month Expense Chart</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">Current ({{\Carbon\Carbon::now()->format('F')}}) Month Expense Chart</h3>
                         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8">
                             <!-- Chart Section -->
                             <div class="flex-shrink-0">
