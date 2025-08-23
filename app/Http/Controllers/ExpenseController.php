@@ -21,6 +21,8 @@ class ExpenseController extends Controller
 
         $data = Expense::query();
 
+        $data = $data->where('user_id', auth()->user()->id);
+
         $data = $data->latest();
 
         $data = $data->paginate(10);

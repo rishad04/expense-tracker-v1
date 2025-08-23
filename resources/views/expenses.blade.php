@@ -53,8 +53,6 @@
                                                 No Data Found !
                                             </td>
                                         </tr>
-
-                                        
                                     @endforelse
                                   
                                 </tbody>

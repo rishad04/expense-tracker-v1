@@ -13,29 +13,34 @@ class CurrentMonthExpenseController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest()->get();
-
-        $currentMonth = now()->format('Y-m');
         $user = auth()->user();
+        $currentMonth = now()->format('Y-m');
 
-        $monthlyTotals = Expense::selectRaw('categories.slug as category_slug, SUM(amount) as total')
+        // For initial
+        $allCategories = Category::pluck('slug', 'slug')->map(function () {
+            return 0.0;
+        });
+
+        $usersCurrentMonthExpenses = Expense::selectRaw('categories.slug as category_slug, SUM(amount) as total')
             ->join('categories', 'expenses.category_id', '=', 'categories.id')
             ->where('expenses.user_id', $user->id)
             ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
             ->groupBy('categories.slug')
             ->pluck('total', 'category_slug');
 
-        // dd($monthlyTotals);
+        // change values if found
+        $monthlyTotals = $allCategories->merge($usersCurrentMonthExpenses);
 
         $grandTotal = $monthlyTotals->sum();
         $monthlyTotals->put('total', $grandTotal);
 
+        // Get the latest expenses for the table
+        $data = Expense::where('user_id', $user->id)->where('date', today())->latest()->limit(4)->get();
+
         // dd($monthlyTotals);
 
-        $data = Expense::latest()->limit(4)->get();
-
-        // $data = Expense::latest()->limit(4)->get();
-        return view('dashboard', compact('categories', 'monthlyTotals', 'data'));
+        // Pass the complete chart data to the view
+        return view('dashboard', compact('monthlyTotals', 'data'));
     }
 
 
