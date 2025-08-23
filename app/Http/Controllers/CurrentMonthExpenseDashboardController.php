@@ -6,7 +6,7 @@ use App\Models\Expense;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CurrentMonthExpenseController extends Controller
+class CurrentMonthExpenseDashboardController extends Controller
 {
     /**
      * Display a listing of the resource.

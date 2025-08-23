@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CurrentMonthExpenseController;
+use App\Http\Controllers\CurrentMonthExpenseDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,14 +21,14 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', [CurrentMonthExpenseController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [CurrentMonthExpenseDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/current-month-expenses', function () {
     return view('current-month-expenses');
 })->middleware(['auth', 'verified'])->name('current-month-expenses');
 
 // Current Month Expenses 
-Route::get('/current-month-expenses', [CurrentMonthExpenseController::class, 'index'])->middleware(['auth', 'verified'])->name('current-month-expenses');
+Route::get('/current-month-expenses', [CurrentMonthExpenseDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('current-month-expenses');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
