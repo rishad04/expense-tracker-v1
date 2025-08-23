@@ -2,11 +2,11 @@
     <x-slot name="header">
 
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-semibold text-gray-800"> {{ __('Dashboard') }}</h3>
+            <h3 class="text-lg font-semibold text-gray-800"> {{ __('Expense Tracker') }}</h3>
 
-            <button  id="openExpenseModal" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-               + Add Expense
-            </button>
+            <a href="{{route('expenses.index')}}" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+               Expenses
+            </a>
         </div>
         
     </x-slot>
@@ -19,7 +19,7 @@
                 <!-- This Month's Expense Chart -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">This Month's Expense Chart</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">This ({{\Carbon\Carbon::now()->format('F')}}) Month Expense Chart</h3>
                         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8">
                             <!-- Chart Section -->
                             <div class="flex-shrink-0">

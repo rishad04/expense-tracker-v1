@@ -16,18 +16,12 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses')">
+                    <x-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.*')">
                         {{ __('Expenses') }}
                     </x-nav-link>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('current-month-expenses')" :active="request()->routeIs('current-month-expenses')">
-                        {{ __('Current Month Expenses') }}
-                    </x-nav-link>
-                </div>
             </div>
 
             <!-- Settings Dropdown -->
