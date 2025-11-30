@@ -27,7 +27,7 @@ Route::get('/current-month-expenses', function () {
     return view('current-month-expenses');
 })->middleware(['auth', 'verified'])->name('current-month-expenses');
 
-// Current Month Expenses 
+// Current Month Expenses
 Route::get('/current-month-expenses', [CurrentMonthExpenseDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('current-month-expenses');
 
 Route::middleware('auth')->group(function () {
@@ -40,5 +40,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
     Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
 });
+
+use App\Http\Controllers\QRCodeController;
+
+Route::get('/qr/google', [QRCodeController::class, 'generateGoogleQr']);
+Route::get('/qr/google/save', [QRCodeController::class, 'generateGoogleQrAndSave']);
+
 
 require __DIR__ . '/auth.php';
